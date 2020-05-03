@@ -27,8 +27,11 @@ const ContainerMap = (props) => {
       <Marker
           key={'id'}
           position={[ lat, lng ]}
-          onClick={() => console.log('pulsado marker')}
+          // onClick={() => console.log('pulsado marker')}
       >
+        <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
       </Marker>
     </Map>
   )
