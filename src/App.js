@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ContainerMap } from './components'
 import './App.css';
+import { getEvents } from './api/events'
 
 const getGeolocation = () => {
   const onSuccess = position => {
@@ -18,14 +19,25 @@ const getGeolocation = () => {
   }
 }
 
+console.log('getEvents', getEvents)
+
 const App = () => {
 
+  const [events, setEvents] = useState([])
+
   useEffect(getGeolocation, []);
+
+  useEffect(() => {
+    getEvents().then(data => setEvents(data))
+  }, []);
 
   return (
     <div className="App">
       <p>hola</p>
-      <ContainerMap/>
+      { // TODO: quitar esto y poner un loading
+        events.length && <ContainerMap events={events} />
+      }
+      
     </div>
   );
 }

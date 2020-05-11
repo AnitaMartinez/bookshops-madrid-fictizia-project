@@ -1,13 +1,13 @@
 import React from 'react'
 import { Map, Marker, Popup, TileLayer } from "react-leaflet";
 import "./ContainerMap.css";
-import { Icon } from "leaflet";
+import { ContentPopup } from '../../components'
 
 // import PropTypes from 'prop-types'
 
-const coordenates = {
-  lat: 40.417147,
-  lng: -3.703494,
+const coordenatesMadrid = {
+  latitude: 40.417147,
+  longitude: -3.703494,
 };
 
 const attributionOpenStreetMap = {
@@ -17,22 +17,31 @@ const attributionOpenStreetMap = {
 
 
 const ContainerMap = (props) => {
-  const { lat, lng} = coordenates;
+  const { latitude: latMadrid, longitude: lngMadrid} = coordenatesMadrid;
+  const { events } = props
+
   return (
-    <Map center={[lat, lng]} zoom={13}>
+    <Map center={[latMadrid, lngMadrid]} zoom={11}>
       <TileLayer
         url={attributionOpenStreetMap.url}
         attribution={attributionOpenStreetMap.attribution}
       />
-      <Marker
-          key={'id'}
-          position={[ lat, lng ]}
-          // onClick={() => console.log('pulsado marker')}
-      >
-        <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-      </Marker>
+      {
+        events.map(event => {
+          console.log('>> event', event)
+          return (
+            <Marker
+              key={event.id}
+              position={[ event.location ? event.location.latitude : latMadrid, event.location ? event.location.longitude : lngMadrid ]}
+              // onClick={() => console.log('pulsado marker')}
+              >
+                <Popup>
+                  <ContentPopup/>
+                </Popup>
+              </Marker>
+          )
+        })
+      }
     </Map>
   )
 }
