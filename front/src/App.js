@@ -19,8 +19,6 @@ const getGeolocation = () => {
   }
 }
 
-console.log('getEvents', getEvents)
-
 const App = () => {
 
   const [events, setEvents] = useState([])
