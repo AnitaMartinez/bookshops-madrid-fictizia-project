@@ -1,11 +1,11 @@
 
-const url = 'https://datos.madrid.es/egob/catalogo/206717-0-agenda-eventos-bibliotecas.json' // TODO: poner url en el .env
+const url = 'http://localhost:5000/catalogue'
 
 const getEvents = () => {
     return new Promise((resolve, reject) => {
         fetch(url)
         .then(response => response.json())
-        .then(data => resolve(data['@graph']))
+        .then(data => resolve(data))
         .catch((err) => console.log(err))
     })
 }
