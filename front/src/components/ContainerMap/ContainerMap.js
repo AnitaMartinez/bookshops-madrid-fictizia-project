@@ -1,24 +1,14 @@
 import React from 'react'
 import { Map, Marker, Popup, TileLayer } from "react-leaflet";
-import "./ContainerMap.css";
+import PropTypes from 'prop-types'
 import { ContentPopup } from '../../components'
-
-// import PropTypes from 'prop-types'
-
-const coordenatesMadrid = {
-  latitude: 40.417147,
-  longitude: -3.703494,
-};
-
-const attributionOpenStreetMap = {
-  url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}
+import { coordsMadrid, attributionOpenStreetMap } from '../../utils'
+import "./ContainerMap.css";
 
 
-const ContainerMap = (props) => {
-  const { latitude: latMadrid, longitude: lngMadrid} = coordenatesMadrid;
-  const { events } = props
+const ContainerMap = ({ events, userLocation }) => {
+  const { latitude: latMadrid, longitude: lngMadrid} = coordsMadrid;
+  console.log('userLocation', userLocation)
 
   return (
     <Map center={[latMadrid, lngMadrid]} zoom={11}>
@@ -28,22 +18,56 @@ const ContainerMap = (props) => {
       />
       {
         events.map(event => {
-          console.log('>> event', event)
+          const position = [ // TODO: userLocation empieza siendo un array, luego es un objeto cuando está lleno
+            event.coordenates ? event.coordenates.latitude : userLocation ? userLocation.latitude : coordsMadrid.latitude,
+            event.coordenates ? event.coordenates.longitude : userLocation ? userLocation.longitude : coordsMadrid.longitude,
+
+          ]
           return (
             <Marker
               key={event.id}
-              position={[ event.location ? event.location.latitude : latMadrid, event.location ? event.location.longitude : lngMadrid ]}
-              // onClick={() => console.log('pulsado marker')}
+              position={position}
               >
                 <Popup>
-                  <ContentPopup/>
+                  <ContentPopup
+                    event={event}
+                  />
                 </Popup>
-              </Marker>
+            </Marker>
           )
         })
       }
     </Map>
   )
+}
+
+ContainerMap.propTypes = {
+  events: PropTypes.arrayOf(PropTypes.shape({
+    coordenates: PropTypes.shape({
+      latitude: PropTypes.number,
+      longitude: PropTypes.number
+    }),
+    id: PropTypes.string.isRequired,
+    dates: PropTypes.shape({
+      startDate: PropTypes.string,
+      endDate: PropTypes.string
+    }),
+    title: PropTypes.string,
+    address: PropTypes.object,
+    audience: PropTypes.string,
+    bookshop: PropTypes.string,
+    description: PropTypes.string,
+    recurrence: PropTypes.shape({
+      days: PropTypes.string,
+      frequency: PropTypes.string
+    }),
+    time: PropTypes.string,
+  })),
+  userLocation: PropTypes.arrayOf(PropTypes.string)
+}
+
+ContainerMap.defaultProps = {
+  events: []
 }
 
 export default ContainerMap;

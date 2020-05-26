@@ -1,18 +1,39 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 
-const ContentPopup = (props) => {
-//   const { event } = props
-//   const { title, bookshop, dates, recurrence } = event
+const ContentPopup = ({ event }) => {
+  const { title, bookshop, dates, recurrence, time } = event
   return (
     <>
-        <h3>2º Curso en línea de Meditación y Relajación</h3>
-        <span>Biblioteca Pública Municipal Gloria Fuertes (Barajas)</span>
-        <span>23/05/2020 - 15/06/2020</span>
-        <span>Martes, a las 17:00 horas</span>
+        {
+          title && <h3>{ title }</h3>
+        }
+        <h4>{ bookshop ? bookshop : 'Evento online' }</h4>
+        {
+          dates && <p>{ `Del ${dates.startDate} al ${dates.endDate}` }</p>
+        }
+        {
+          recurrence && (
+            <>
+              {
+                time && <span>{ `${time} horas. ` }</span>
+              }
+              <span>{ `${recurrence.days}. Frecuencia: ${recurrence.frequency}` }</span>
+            </>
+          )
+        }
         <button>Más información</button>
     </>
   )
+}
+
+ContentPopup.propTypes = {
+  event: PropTypes.object
+}
+
+ContentPopup.defaultProps = {
+  events: {}
 }
 
 export default ContentPopup;

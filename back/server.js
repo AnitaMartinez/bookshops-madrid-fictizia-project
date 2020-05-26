@@ -14,7 +14,6 @@ app.get('/catalogue', function (req, res) {
     axios.get(`https://datos.madrid.es/egob/catalogo/206717-0-agenda-eventos-bibliotecas.json`)
         .then(response => {
             const formattedData = parse(response.data)
-            console.log('formattedData', formattedData)
             return formattedData
         })
         .then(data => {

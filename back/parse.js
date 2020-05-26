@@ -1,17 +1,8 @@
 
-// const parseDates = (dtstart, dtend) => {
-//     console.log('> por aquí')
-//     const obj = {
-//         startDate: dtstart ?
-//             `${dtstart.getFullYear()}-${dtstart.getMonth()}-${dtstart.getDate()}`
-//                 : null,
-//         endDate: dtend ?
-//             `${dtend.getFullYear()}-${dtend.getMonth()}-${dtend.getDate()}`
-//                 : null,
-//     }
-//     console.log('obj', obj)
-//     return obj
-// }
+const parseDate = (string) => {
+    const date = new Date(string)
+    return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
+}
 
 const parseData = data => {
     const eventsData = data['@graph']
@@ -27,7 +18,10 @@ const parseData = data => {
             address: event.address && event.address.area ? event.address.area : null,
             time: event.time ?event.time : null,
             recurrence: event.recurrence ? event.recurrence : null,
-            // dates: parseDates(event.dtstart, event.dtend),
+            dates: {
+                startDate: event.dtstart ? parseDate(event.dtstart) : null,
+                endDate: event.dtend ? parseDate(event.dtend) : null,
+            }
         }
     })
 }
