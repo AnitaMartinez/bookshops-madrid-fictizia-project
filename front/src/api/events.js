@@ -1,9 +1,11 @@
 
 const url = 'http://localhost:5000/catalogue'
 
-const getEvents = () => {
+const getEvents = (params) => {
+    const path = params ? `${url}?${params}` : url
+
     return new Promise((resolve, reject) => {
-        fetch(url)
+        fetch(path)
         .then(response => response.json())
         .then(data => {
             resolve(data)
@@ -13,5 +15,5 @@ const getEvents = () => {
 }
 
 export {
-    getEvents
+    getEvents,
 }

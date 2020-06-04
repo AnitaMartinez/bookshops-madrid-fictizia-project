@@ -11,7 +11,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/catalogue', function (req, res) {
-    axios.get(`https://datos.madrid.es/egob/catalogo/206717-0-agenda-eventos-bibliotecas.json`)
+    const query = req["_parsedUrl"].query // TODO: this or req.query
+    axios.get(`https://datos.madrid.es/egob/catalogo/206717-0-agenda-eventos-bibliotecas.json?${query ? query : '' }`)
         .then(response => {
             const formattedData = parse(response.data)
             return formattedData
