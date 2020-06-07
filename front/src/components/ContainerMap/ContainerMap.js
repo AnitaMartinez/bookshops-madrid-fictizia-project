@@ -8,7 +8,12 @@ import "./ContainerMap.css";
 
 const ContainerMap = ({ events, userLocation }) => {
   const { latitude: latMadrid, longitude: lngMadrid} = coordsMadrid;
+
   console.log('userLocation', userLocation)
+
+  const userLocationLoading = Object.keys(userLocation).length === 0
+
+  if(userLocationLoading) return <p>Todavía no</p>
 
   return (
     <Map center={[latMadrid, lngMadrid]} zoom={11}>
@@ -18,7 +23,7 @@ const ContainerMap = ({ events, userLocation }) => {
       />
       {
         events.map(event => {
-          const position = [ // TODO: userLocation empieza siendo un array, luego es un objeto cuando está lleno
+          const position = [
             event.coordenates ? event.coordenates.latitude : userLocation ? userLocation.latitude : coordsMadrid.latitude,
             event.coordenates ? event.coordenates.longitude : userLocation ? userLocation.longitude : coordsMadrid.longitude,
 
@@ -63,7 +68,7 @@ ContainerMap.propTypes = {
     }),
     time: PropTypes.string,
   })),
-  userLocation: PropTypes.arrayOf(PropTypes.string)
+  userLocation: PropTypes.object
 }
 
 ContainerMap.defaultProps = {
