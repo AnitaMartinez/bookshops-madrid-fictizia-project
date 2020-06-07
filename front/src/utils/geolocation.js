@@ -10,6 +10,7 @@ export const getGeolocation = () => {
             })
           },
           error => {
+            console.log('> error', error)
             reject(error)
           }
         );

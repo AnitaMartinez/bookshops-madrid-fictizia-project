@@ -6,25 +6,28 @@ const options = Object.keys(districts).map(key =>
     <option value={key} key={key} >{districts[key]}</option>
 )
 
-
 const Select = ({ onSearch }) => {
 
     const [district, setDistrict] = useState('')
 
     const handleChange = event => {
-        setDistrict(event.target.value)
-    }
-
-    const handleSearch = () => {
+        const district = event.target.value
+        setDistrict(district)
         onSearch(district)
     }
 
+    // const handleSearch = () => {
+    //     onSearch(district)
+    // }
+
     return (
         <>
-            <select value={district} onChange={handleChange}>
+            <label for="district">Busca por distrito: </label>
+            <select id="district" value={district} onChange={handleChange}>
+                <option value={""}></option>
                 { options }
             </select>
-            <button onClick={handleSearch}>Buscar</button>
+            {/* <button onClick={handleSearch}>Buscar por distrito</button> */}
         </>
       )
 }
