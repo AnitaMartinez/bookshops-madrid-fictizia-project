@@ -1,5 +1,6 @@
 import React from 'react'
 import SpinnerSVG from '../../assets/spinner.svg'
+import './Spinner.scss'
 
 const Spinner = () => (
     <div className="Spinner">

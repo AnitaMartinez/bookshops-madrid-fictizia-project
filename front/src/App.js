@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { ContainerMap, Input, Select } from './components'
+import { ContainerMap, Select } from './components'
 import { getGeolocation } from './utils'
 import { getEvents, getEventsByDistrict } from './api/events'
-import './App.css';
+import './App.scss';
 
 const App = () => {
 
@@ -35,7 +35,9 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>Eventos en las bibliotecas de Madrid</h1>
+      <div className="header">
+        <h1 className="main-title">Eventos en las bibliotecas de Madrid</h1>
+      </div>
       <Select onSearch={handleSearch}/>
       <ContainerMap
         events={events}

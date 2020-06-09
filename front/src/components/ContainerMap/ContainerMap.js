@@ -3,7 +3,7 @@ import { Map, Marker, Popup, TileLayer } from "react-leaflet";
 import PropTypes from 'prop-types'
 import { ContentPopup, Spinner } from '../../components'
 import { coordsMadrid, attributionOpenStreetMap } from '../../utils'
-import "./ContainerMap.css";
+import "./ContainerMap.scss";
 
 const ContainerMap = ({ events, userLocation, hasDeniedLocation }) => {
   const { latitude: latMadrid, longitude: lngMadrid} = coordsMadrid;
@@ -12,7 +12,7 @@ const ContainerMap = ({ events, userLocation, hasDeniedLocation }) => {
   if(userLocationLoading && !hasDeniedLocation) return <Spinner/>
 
   return (
-    <Map center={[latMadrid, lngMadrid]} zoom={11}>
+    <Map center={[latMadrid, lngMadrid]} zoom={11} className="Map">
       <TileLayer
         url={attributionOpenStreetMap.url}
         attribution={attributionOpenStreetMap.attribution}
