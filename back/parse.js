@@ -1,3 +1,26 @@
+const dayTranslation = {
+    MO:'LU',
+    TU: 'MA',
+    WE: 'MI',
+    TH: 'JU',
+    FR: 'VI',
+    SA: 'SA',
+    SU: 'DO'
+}
+
+const parseFrequency = ({ recurrence }) => {
+    const { frequency, days } = recurrence;
+    switch (frequency) {
+        case 'WEEKLY': return {
+            days: days.split(',').map((day) => dayTranslation[day]).join(','),
+            frequency: 'Semanal'
+        }
+        default: return {
+            days,
+            frequency
+        };
+    }
+}
 
 const parseDate = (string) => {
     const date = new Date(string)
@@ -17,7 +40,7 @@ const parseData = data => {
             coordenates: event.location ? event.location : null,
             address: event.address && event.address.area ? event.address.area : null,
             time: event.time ?event.time : null,
-            recurrence: event.recurrence ? event.recurrence : null,
+            recurrence: event.recurrence ? parseFrequency(event) : null,
             dates: {
                 startDate: event.dtstart ? parseDate(event.dtstart) : null,
                 endDate: event.dtend ? parseDate(event.dtend) : null,

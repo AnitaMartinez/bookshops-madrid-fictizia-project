@@ -2,13 +2,14 @@ import React, { useState }  from 'react'
 import PropTypes from 'prop-types'
 import { districts } from '../../utils'
 import ArrowDown from '../../assets/down-arrow.svg'
+import SpinnerSVGBlack from "../../assets/black-spinner.svg";
 import './Select.scss';
 
 const options = Object.keys(districts).map(key =>
     <option value={key} key={key} >{districts[key]}</option>
 )
 
-const Select = ({ onSearch }) => {
+const Select = ({ onSearch, loading }) => {
 
     const [district, setDistrict] = useState('')
 
@@ -20,7 +21,8 @@ const Select = ({ onSearch }) => {
 
     return (
         <div className="ContainerSelect">
-            <img src={ArrowDown} alt="flecha abajo" className="arrow-down" ></img>
+            {!loading && <img src={ArrowDown} alt="flecha abajo" className="icon-select"/>}  
+            {loading && <img src={SpinnerSVGBlack} alt="spinner" className="icon-select"/>}  
             <select className="select" id="district" value={district} onChange={handleChange}>
                 <option value={""}>Busca por distrito</option>
                 { options }
@@ -30,7 +32,8 @@ const Select = ({ onSearch }) => {
 }
 
 Select.propTypes = {
-    onSearch: PropTypes.func.isRequired
+    onSearch: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired
 }
 
 export default Select;

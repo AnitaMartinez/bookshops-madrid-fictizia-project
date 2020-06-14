@@ -12,11 +12,11 @@ export const getGeolocation = () => {
           error => {
             console.log('> error', error)
             reject(error)
-          }
+          },
+          {timeout:4000}
         );
       } else {
-        // TODO: esto mandarlo en el reject o en el resolve, pero si no se queda pending
-        console.log('Geolocation not available')
+        throw new Error('Geolocation not available')
       }
     })
   }

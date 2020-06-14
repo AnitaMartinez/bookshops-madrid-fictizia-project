@@ -32,12 +32,12 @@ app.get('/catalogue', function (req, res) {
 })
 
 app.get('/catalogue/district', function async (req, res) {
-    const query = req["_parsedUrl"].query // this or req.query
+    const query = req["_parsedUrl"].query
 
     axios.get(`https://datos.madrid.es/egob/catalogo/206717-0-agenda-eventos-bibliotecas.json?distrito_nombre=${query}`)
         .then(async response => {
             const data = response.data['@graph']
-            if(!data || !data.length ) return [];
+            if(!data || !data.length ) return res.json([]);
             const events = await getDataEvents(data)
             res.json(events)
         })

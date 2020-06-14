@@ -5,14 +5,23 @@ import { ContentPopup, Spinner } from '../../components'
 import { coordsMadrid, attributionOpenStreetMap } from '../../utils'
 import "./ContainerMap.scss";
 
-const ContainerMap = ({ events, userLocation, hasDeniedLocation }) => {
+const ContainerMap = ({ events, userLocation, hasDeniedLocation, isSearchByDistrict }) => {
   const { latitude: latMadrid, longitude: lngMadrid} = coordsMadrid;
-  const userLocationLoading = Object.keys(userLocation).length === 0
+  const isUserLocationLoading = Object.keys(userLocation).length === 0
+  const zoom = isSearchByDistrict ? 14 : 12
 
-  if(userLocationLoading && !hasDeniedLocation) return <Spinner/>
+  if(isUserLocationLoading && !hasDeniedLocation) return <Spinner/>
 
+  const firstEventCoordenates = events && events.length > 0 && events[0] && events[0].coordenates
+  const latitudeMap = firstEventCoordenates && isSearchByDistrict ? firstEventCoordenates.latitude : userLocation ? userLocation.latitude : latMadrid
+  const longitudeMap = firstEventCoordenates && isSearchByDistrict ? firstEventCoordenates.longitude : userLocation ? userLocation.longitude : lngMadrid
+  
   return (
-    <Map center={[latMadrid, lngMadrid]} zoom={11} className="Map">
+    <Map 
+      center={[latitudeMap, longitudeMap]} 
+      zoom={zoom} 
+      className="Map"
+    >
       <TileLayer
         url={attributionOpenStreetMap.url}
         attribution={attributionOpenStreetMap.attribution}
@@ -20,8 +29,8 @@ const ContainerMap = ({ events, userLocation, hasDeniedLocation }) => {
       {
         events.map(event => {
           const position = [
-            event.coordenates ? event.coordenates.latitude : userLocation ? userLocation.latitude : coordsMadrid.latitude,
-            event.coordenates ? event.coordenates.longitude : userLocation ? userLocation.longitude : coordsMadrid.longitude,
+            event.coordenates ? event.coordenates.latitude : coordsMadrid.latitude,
+            event.coordenates ? event.coordenates.longitude : coordsMadrid.longitude,
 
           ]
           return (
@@ -43,6 +52,9 @@ const ContainerMap = ({ events, userLocation, hasDeniedLocation }) => {
 }
 
 ContainerMap.propTypes = {
+  userLocation: PropTypes.object,
+  hasDeniedLocation: PropTypes.bool,
+  isSearchByDistrict: PropTypes.bool,
   events: PropTypes.arrayOf(PropTypes.shape({
     coordenates: PropTypes.shape({
       latitude: PropTypes.number,
@@ -63,9 +75,7 @@ ContainerMap.propTypes = {
       frequency: PropTypes.string
     }),
     time: PropTypes.string,
-  })),
-  userLocation: PropTypes.object,
-  hasDeniedLocation: PropTypes.bool
+  }))
 }
 
 ContainerMap.defaultProps = {

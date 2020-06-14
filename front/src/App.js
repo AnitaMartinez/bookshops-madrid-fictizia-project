@@ -9,27 +9,65 @@ const App = () => {
   const [events, setEvents] = useState([])
   const [userLocation, setUserLocation] = useState({})
   const [hasDeniedLocation, setHasDeniedLocation] = useState(false)
+  const [isSearchByDistrict, setCloserZoom] = useState(false)
+  const [loadingSelect, setLoadingSelect] = useState(false)
+  const [error, setError] = useState(null)
+  
+  const setAllEvents = async () => {
+    try {
+      setCloserZoom(false)
+      const data = await getEvents()
+      setEvents(data)
+      if ( data.length === 0 ) setError('No hay eventos')
+    } catch(error) {
+      console.error(error)
+    }
+  }
 
-
-  useEffect(() => { // TODO: manage errors --> catch
-    getGeolocation().then(value => {
+  const setGeolocation = async () => {
+    try {
+      setError(null)
+      const value = await getGeolocation()
       setUserLocation(value)
-    })
-    .catch(error => {
+    } catch (error) {
       if(error.code === 1 && error.message === 'User denied Geolocation'){
         setHasDeniedLocation(true)
       } else {
-        console.log(error)
+        console.error(error)
       }
-    })
-    getEvents().then(data => setEvents(data))
+    }
+  } 
+
+  const setEventsByDistrict = async (district) => {
+    setCloserZoom(true)
+    try {
+      const data = await getEventsByDistrict(district)
+      setEvents(data)
+      if ( data.length === 0 ) setError('No hay eventos')
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    const init = async() => {
+      setLoadingSelect(true)
+      await setGeolocation()
+      await setAllEvents()
+      setLoadingSelect(false)
+    } 
+    init()
   }, []);
 
-  const handleSearch = district => {
+  const handleSearch = async district => {
+    setLoadingSelect(true)
+    setError(null)
     if(!district) {
-      getEvents().then(data => setEvents(data))
+      await setAllEvents()
+      setLoadingSelect(false)
     } else {
-      getEventsByDistrict(district).then(data => setEvents(data))
+      await setEventsByDistrict(district)
+      setLoadingSelect(false)
     }
   }
 
@@ -38,11 +76,13 @@ const App = () => {
       <div className="header">
         <h1 className="main-title">Eventos en las bibliotecas de Madrid</h1>
       </div>
-      <Select onSearch={handleSearch}/>
+      <Select onSearch={handleSearch} loading={loadingSelect}/>
+      {error && <p>{error}</p>}
       <ContainerMap
         events={events}
         userLocation={userLocation}
         hasDeniedLocation={hasDeniedLocation}
+        isSearchByDistrict={isSearchByDistrict}
       />
     </div>
   );
