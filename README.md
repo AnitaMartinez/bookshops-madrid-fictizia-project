@@ -1,7 +1,7 @@
 
-## Buscador de eventos en las librerías de Madrid
+## Search for events in Madrid bookstores
 
-### Develop
+### Install and run
 
 In the ``front``folder:
 

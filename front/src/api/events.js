@@ -2,7 +2,6 @@
 const url = 'http://localhost:5000/catalogue'
 const urlByDistrict = 'http://localhost:5000/catalogue/district'
 
-
 const getEvents = () => {
     return new Promise((resolve, reject) => {
         fetch(url)
