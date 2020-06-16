@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { ContainerMap, Select } from './components'
 import { getGeolocation } from './utils'
 import { getEvents, getEventsByDistrict } from './api/events'
-import './App.scss';
+import './App.scss'
 
 const App = () => {
-
   const [events, setEvents] = useState([])
   const [userLocation, setUserLocation] = useState({})
   const [errorUserLocation, setErrorUserLocation] = useState(false)
@@ -13,15 +12,15 @@ const App = () => {
   const [isSearchByDistrict, setCloserZoom] = useState(false)
   const [loadingSelect, setLoadingSelect] = useState(false)
   const [error, setError] = useState(null)
-  
+
   const setAllEvents = async () => {
     try {
       setCloserZoom(false)
       const data = await getEvents()
       setEvents(data)
-      if ( data.length === 0 ) setError('No hay eventos')
-    } catch(error) {
-      console.error(error)
+      if (data.length === 0) setError('No hay eventos')
+    } catch (err) {
+      console.error(err)
     }
   }
 
@@ -30,41 +29,41 @@ const App = () => {
       setError(null)
       const value = await getGeolocation()
       setUserLocation(value)
-    } catch (error) {
-      if(error.code === 1 && error.message === 'User denied Geolocation'){
+    } catch (err) {
+      if (err.code === 1 && err.message === 'User denied Geolocation') {
         setHasDeniedLocation(true)
       } else {
         setErrorUserLocation(true)
-        console.error(error)
+        console.error(err)
       }
     }
-  } 
+  }
 
   const setEventsByDistrict = async (district) => {
     setCloserZoom(true)
     try {
       const data = await getEventsByDistrict(district)
       setEvents(data)
-      if ( data.length === 0 ) setError('No hay eventos')
-    } catch(error) {
-      console.error(error)
+      if (data.length === 0) setError('No hay eventos')
+    } catch (err) {
+      console.error(err)
     }
   }
 
   useEffect(() => {
-    const init = async() => {
+    const init = async () => {
       setLoadingSelect(true)
       await setGeolocation()
       await setAllEvents()
       setLoadingSelect(false)
-    } 
+    }
     init()
-  }, []);
+  }, [])
 
-  const handleSearch = async district => {
+  const handleSearch = async (district) => {
     setLoadingSelect(true)
     setError(null)
-    if(!district) {
+    if (!district) {
       await setAllEvents()
       setLoadingSelect(false)
     } else {
@@ -78,7 +77,7 @@ const App = () => {
       <div className="header">
         <h1 className="main-title">Eventos en las bibliotecas de Madrid</h1>
       </div>
-      <Select onSearch={handleSearch} loading={loadingSelect}/>
+      <Select onSearch={handleSearch} loading={loadingSelect} />
       {error && <p>{error}</p>}
       <ContainerMap
         events={events}
@@ -88,7 +87,7 @@ const App = () => {
         errorUserLocation={errorUserLocation}
       />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

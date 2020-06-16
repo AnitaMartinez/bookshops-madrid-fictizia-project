@@ -1,19 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import "./ContentPopup.scss";
+import './ContentPopup.scss'
 
 const ContentPopup = ({ event }) => {
-  const { title, bookshop, dates, recurrence, time, link } = event
+  const {
+    title, bookshop, dates, recurrence, time, link,
+  } = event
   return (
     <div className="ContentPopUp">
-        {
+      {
           title && <h3 className="title">{ title }</h3>
         }
-        <h4 className="bookshop">{ bookshop ? bookshop : 'Evento online' }</h4>
-        {
+      <h4 className="bookshop">{ bookshop || 'Evento online' }</h4>
+      {
           dates && <p>{ `Del ${dates.startDate} al ${dates.endDate}` }</p>
         }
-        {
+      {
           recurrence && (
             <>
               {
@@ -23,17 +25,17 @@ const ContentPopup = ({ event }) => {
             </>
           )
         }
-        <a href={link} target="_blank" rel="noopener noreferrer" className="link">Más información</a>
+      <a href={link} target="_blank" rel="noopener noreferrer" className="link">Más información</a>
     </div>
   )
 }
 
 ContentPopup.propTypes = {
-  event: PropTypes.object
+  event: PropTypes.object,
 }
 
 ContentPopup.defaultProps = {
-  events: {}
+  event: {},
 }
 
-export default ContentPopup;
+export default ContentPopup
