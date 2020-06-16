@@ -8,6 +8,7 @@ const App = () => {
 
   const [events, setEvents] = useState([])
   const [userLocation, setUserLocation] = useState({})
+  const [errorUserLocation, setErrorUserLocation] = useState(false)
   const [hasDeniedLocation, setHasDeniedLocation] = useState(false)
   const [isSearchByDistrict, setCloserZoom] = useState(false)
   const [loadingSelect, setLoadingSelect] = useState(false)
@@ -33,6 +34,7 @@ const App = () => {
       if(error.code === 1 && error.message === 'User denied Geolocation'){
         setHasDeniedLocation(true)
       } else {
+        setErrorUserLocation(true)
         console.error(error)
       }
     }
@@ -83,6 +85,7 @@ const App = () => {
         userLocation={userLocation}
         hasDeniedLocation={hasDeniedLocation}
         isSearchByDistrict={isSearchByDistrict}
+        errorUserLocation={errorUserLocation}
       />
     </div>
   );

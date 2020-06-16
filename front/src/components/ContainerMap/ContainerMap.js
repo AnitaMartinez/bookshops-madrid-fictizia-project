@@ -5,16 +5,20 @@ import { ContentPopup, Spinner } from '../../components'
 import { coordsMadrid, attributionOpenStreetMap } from '../../utils'
 import "./ContainerMap.scss";
 
-const ContainerMap = ({ events, userLocation, hasDeniedLocation, isSearchByDistrict }) => {
+const ContainerMap = ({ 
+  events, 
+  userLocation, 
+  hasDeniedLocation, 
+  isSearchByDistrict,
+  errorUserLocation 
+}) => {
   const { latitude: latMadrid, longitude: lngMadrid} = coordsMadrid;
-  const isUserLocationLoading = Object.keys(userLocation).length === 0
+  const isThereUserLocation = Object.keys(userLocation).length !== 0
   const zoom = isSearchByDistrict ? 14 : 12
-
-  if(isUserLocationLoading && !hasDeniedLocation) return <Spinner/>
-
+  if(!isThereUserLocation && !hasDeniedLocation && !errorUserLocation) return <Spinner/>
   const firstEventCoordenates = events && events.length > 0 && events[0] && events[0].coordenates
-  const latitudeMap = firstEventCoordenates && isSearchByDistrict ? firstEventCoordenates.latitude : userLocation ? userLocation.latitude : latMadrid
-  const longitudeMap = firstEventCoordenates && isSearchByDistrict ? firstEventCoordenates.longitude : userLocation ? userLocation.longitude : lngMadrid
+  const latitudeMap = firstEventCoordenates && isSearchByDistrict ? firstEventCoordenates.latitude : isThereUserLocation  ? userLocation.latitude : latMadrid
+  const longitudeMap = firstEventCoordenates && isSearchByDistrict ? firstEventCoordenates.longitude : isThereUserLocation ? userLocation.longitude : lngMadrid
   
   return (
     <Map 
@@ -53,8 +57,9 @@ const ContainerMap = ({ events, userLocation, hasDeniedLocation, isSearchByDistr
 
 ContainerMap.propTypes = {
   userLocation: PropTypes.object,
-  hasDeniedLocation: PropTypes.bool,
-  isSearchByDistrict: PropTypes.bool,
+  hasDeniedLocation: PropTypes.bool.isRequired,
+  isSearchByDistrict: PropTypes.bool.isRequired,
+  errorUserLocation: PropTypes.bool.isRequired,
   events: PropTypes.arrayOf(PropTypes.shape({
     coordenates: PropTypes.shape({
       latitude: PropTypes.number,

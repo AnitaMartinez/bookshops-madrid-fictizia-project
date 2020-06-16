@@ -10,10 +10,9 @@ export const getGeolocation = () => {
             })
           },
           error => {
-            console.log('> error', error)
             reject(error)
           },
-          {timeout:4000}
+          {timeout:5000}
         );
       } else {
         throw new Error('Geolocation not available')
